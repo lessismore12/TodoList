@@ -10,3 +10,12 @@ long_about = "a list you control"
 
 [dependencies]
 clap = { version = "4.4.12", features = ["derive"] }
+colored = "2.1.0"
+console = "0.15.7"
+dialoguer = "0.11.0"
+directories = "5.0.1"
+tui = "0.19.0"
+
+[[bin]]
+name = "todo"
+path = "src/main.rs"
