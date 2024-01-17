@@ -1,4 +1,4 @@
-use std::{fs::{File, OpenOptions}, path::Path, io::{Read, Write, BufWriter}};
+use std::{fs::{File, OpenOptions}, path::{Path, self}, io::{Read, Write, BufWriter, BufReader, self, BufRead}};
 
 
 #[allow(unused)]
@@ -34,7 +34,18 @@ impl TodoList {
             let line = format!("{}\n", item);
             let _ = buffer.write_all(line.as_bytes());
         }
-       
+    }
+
+    pub fn remove_items(&mut self, items: &[String])-> io::Result<()> { 
+        let buf = {
+            let mut reader = io::BufReader::new(self.file);
+            reader.read_to_string();
+            let mut buf = Vec::new();
+            reader.read_to_end(&mut buf)?;
+            buf
+        };
+        File::create(self.file_path)?.write_all(&buf)?;
+        Ok(())
     }
 
     pub fn create_file(&mut self) {
