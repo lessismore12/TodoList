@@ -25,14 +25,14 @@ fn main() {
 
     println!("{:?}", args);
 
-    println!("{:?}", &args[1]);
     if args.len() >= 1 { 
         let command: &String = &args[1];
 
         match &command[..] {
             "create" => todo_list.create_file(),
             "add" => todo_list.add_item(&args[2..]),
-            "remove" => todo_list.remove_items(&args[2..]),
+            //"remove" => todo_list.remove_items(&args[2..].to_vec()),
+            "reset" => todo_list.create_file(),
             "--help" => TodoList::help(),
             &_ => todo_list.read_from_file()
         } 

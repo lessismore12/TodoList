@@ -1,4 +1,4 @@
-use std::{fs::{File, OpenOptions}, path::{Path, self}, io::{Read, Write, BufWriter, BufReader, self, BufRead}};
+use std::{fs::{File, OpenOptions}, path::{Path}, io::{Read, Write, BufWriter}};
 
 
 #[allow(unused)]
@@ -28,7 +28,7 @@ impl TodoList {
     }
 
     pub fn add_item(&mut self, items: &[String]) { 
-        let file = OpenOptions::new().append(true).open(self.file_path.clone()).unwrap();
+        let file = OpenOptions::new().append(true).open(FILE_PATH).unwrap();
         let mut buffer = BufWriter::new(file);
         for item in items {
             let line = format!("{}\n", item);
@@ -36,20 +36,29 @@ impl TodoList {
         }
     }
 
-    pub fn remove_items(&mut self, items: &[String])-> io::Result<()> { 
-        let buf = {
-            let mut reader = io::BufReader::new(self.file);
-            reader.read_to_string();
-            let mut buf = Vec::new();
-            reader.read_to_end(&mut buf)?;
-            buf
-        };
-        File::create(self.file_path)?.write_all(&buf)?;
-        Ok(())
-    }
+    // pub fn remove_items(&mut self, lines_to_remove: Vec<String>) {
+    //     // Read the file into a vector of lines
+    //     let contents = self.get_contents();
+    //     let vec_of_contents  = [];
+
+    
+    //     // Filter out the lines to be removed
+    //     let updated_lines: Vec<&str> = contents.lines()
+    //         .filter(|content: String| !lines_to_remove.contains(content))
+    //         .map(|s| s.as_str())
+    //         .collect();
+    
+    //     // Write the updated content back to the file
+    //     let mut file = File::create(self.file_path);
+    //     for line in updated_lines {
+    //         writeln!(file, "{}", line);
+    //     }
+    
+
+    // }
 
     pub fn create_file(&mut self) {
-        self.file = File::create(FILE_PATH).expect("Failed to create file");
+        File::create(FILE_PATH).expect("Failed to create file");
     }
 
     pub fn read_from_file(&self) {
@@ -64,8 +73,7 @@ impl TodoList {
         println!("{}", contents);
     }
 
-    #[allow(unused)]
-    fn get_contents(&mut self) {
+    fn get_contents(&mut self)-> String {
     
         let mut contents = String::new();
     
@@ -75,6 +83,8 @@ impl TodoList {
         for line in contents.lines() {
             print!("{:?}", line)
         }
+
+        contents
     }
 
     const TODO_HELP: &'static str = "Usage: todo [COMMAND] [ARGUMENTS]
