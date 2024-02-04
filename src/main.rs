@@ -40,3 +40,21 @@ fn main() {
         TodoList::help();
     }
 }
+
+// fn test() {
+//     // Create a mutable string to store user input
+//     let mut input = String::new();
+
+//     // Print a prompt without a new line
+//     print!("Please enter some text: ");
+
+//     // Flush the output to ensure the prompt is displayed
+//     io::stdout().flush().unwrap();
+
+//     // Read user input into the string
+//     io::stdin().read_line(&mut input)
+//         .expect("Failed to read line");
+
+//     // Print the user input
+//     println!("You entered: {}", input);
+// }

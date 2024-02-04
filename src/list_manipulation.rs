@@ -6,7 +6,7 @@ const FILE_PATH: &str = "todo.txt";
 
 pub struct TodoList {
     file: File,
-    file_path: String,
+    list: Vec<String>,
 }
 
 impl TodoList {
@@ -16,13 +16,13 @@ impl TodoList {
             Self {
                 file: File::open(FILE_PATH)
                 .expect(&format!("file not found: {}", FILE_PATH)),
-                file_path: FILE_PATH.to_string()
+                list: get_contents()
             }
         } else {
             println!("I see you don't have a list started. I'll make one for you");
             Self {
                 file: File::create(FILE_PATH).expect("Failed to create file"),
-                file_path: FILE_PATH.to_string()
+                list: Vec::new()
             }
         }
     }
@@ -125,4 +125,21 @@ impl TodoList {
 #[allow(unused)]
 fn does_file_exist() -> bool {
     Path::new(FILE_PATH).exists()
+}
+
+fn get_contents()-> Vec<String> {
+    
+    let mut list_of_contents: Vec<String>= Vec::new();
+    let mut contents = String::new();
+    let mut file = File::open(FILE_PATH)
+            .expect(&format!("file not found: {}", FILE_PATH));
+
+    file.read_to_string(&mut contents)
+        .expect(&format!("cannot read file {}", FILE_PATH));
+
+    for line in contents.lines() {
+        list_of_contents.push(line.to_string())
+    }
+
+    list_of_contents
 }
