@@ -1,4 +1,4 @@
-use std::{fs::{File, OpenOptions}, path::{Path}, io::{Read, Write, BufWriter}};
+use std::{fs::{File, OpenOptions}, path::Path, io::{Read, Write, BufWriter}};
 
 
 #[allow(unused)]
@@ -28,11 +28,38 @@ impl TodoList {
     }
 
     pub fn add_item(&mut self, items: &[String]) { 
+        
+        let mut temp = String::from("");
+        let mut new_items: Vec<String> = Vec::new();
+        for i in 0..items.len() {
+            println!("my item is {}", items[i]);
+            println!("{}", items[i].ends_with(","));
+            if items[i].starts_with("--") {
+                if temp != "" {
+                    new_items.push(temp.to_string().trim().to_owned());
+                    println!("Vec: {:?}", new_items);
+                }
+                temp = String::from("");
+                temp.push_str(&items[i][2..]);
+            } else {
+                temp.push_str(&(" ".to_owned() + &items[i]));
+            } 
+
+            if i == items.len()-1 {
+                new_items.push(temp.to_string().trim().to_owned());
+                println!("Vec: {:?}", new_items);
+            }
+        }
+        self.append_list(new_items);        
+    }
+
+    fn append_list(&self, items_to_add: Vec<String>) {
         let file = OpenOptions::new().append(true).open(FILE_PATH).unwrap();
         let mut buffer = BufWriter::new(file);
-        for item in items {
+
+        for item in items_to_add {
             let line = format!("{}\n", item);
-            let _ = buffer.write_all(line.as_bytes());
+            let _ = buffer.write(line.as_bytes());
         }
     }
 
@@ -73,18 +100,10 @@ impl TodoList {
         println!("{}", contents);
     }
 
-    fn get_contents(&mut self)-> String {
-    
-        let mut contents = String::new();
-    
-        self.file.read_to_string(&mut contents)
-            .expect(&format!("cannot read file {}", FILE_PATH));
-    
-        for line in contents.lines() {
-            print!("{:?}", line)
-        }
 
-        contents
+    pub fn list_items(&self) {
+        let file_contents = std::fs::read_to_string(FILE_PATH).unwrap();
+        file_contents.lines().for_each(|line| println!("{}", line))
     }
 
     const TODO_HELP: &'static str = "Usage: todo [COMMAND] [ARGUMENTS]
@@ -93,7 +112,7 @@ impl TodoList {
         Available commands:
             - add [TASK/s]
                 adds new task/s
-                Example: todo add \"buy carrots\"
+                Example: todo add \"--go to the the supermarket --do laundry\"
             - list
                 lists all tasks
                 Example: todo list
