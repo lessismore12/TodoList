@@ -53,13 +53,17 @@ impl TodoList {
         self.append_list(new_items);        
     }
 
-    fn append_list(&self, items_to_add: Vec<String>) {
+    fn append_list(&mut self, items_to_add: Vec<String>) {
         let file = OpenOptions::new().append(true).open(FILE_PATH).unwrap();
         let mut buffer = BufWriter::new(file);
 
+        
+        print!("items in list {:?}", self.list);
         for item in items_to_add {
+            print!("{}", item);
             let line = format!("{}\n", item);
             let _ = buffer.write(line.as_bytes());
+            self.list.push(item);
         }
     }
 
