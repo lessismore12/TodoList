@@ -1,34 +1,28 @@
-use std::{fs::{File, OpenOptions}, path::Path, io::{Read, Write, BufWriter}};
+use std::{fs::{File, OpenOptions}, io::{BufWriter, Read, Write}, path::Path};
 
 
 #[allow(unused)]
 const FILE_PATH: &str = "todo.txt";
 
 pub struct TodoList {
-    file: File,
     list: Vec<String>,
 }
 
 impl TodoList {
-
     pub fn new() -> Self {
         if does_file_exist() {
             Self {
-                file: File::open(FILE_PATH)
-                .expect(&format!("file not found: {}", FILE_PATH)),
                 list: get_contents()
             }
         } else {
             println!("I see you don't have a list started. I'll make one for you");
             Self {
-                file: File::create(FILE_PATH).expect("Failed to create file"),
                 list: Vec::new()
             }
         }
     }
 
     pub fn add_item(&mut self, items: &[String]) { 
-        
         let mut temp = String::from("");
         let mut new_items: Vec<String> = Vec::new();
         for i in 0..items.len() {
@@ -47,7 +41,6 @@ impl TodoList {
 
             if i == items.len()-1 {
                 new_items.push(temp.to_string().trim().to_owned());
-                println!("Vec: {:?}", new_items);
             }
         }
         self.append_list(new_items);        
@@ -56,9 +49,7 @@ impl TodoList {
     fn append_list(&mut self, items_to_add: Vec<String>) {
         let file = OpenOptions::new().append(true).open(FILE_PATH).unwrap();
         let mut buffer = BufWriter::new(file);
-
         
-        print!("items in list {:?}", self.list);
         for item in items_to_add {
             print!("{}", item);
             let line = format!("{}\n", item);
@@ -67,26 +58,23 @@ impl TodoList {
         }
     }
 
-    // pub fn remove_items(&mut self, lines_to_remove: Vec<String>) {
-    //     // Read the file into a vector of lines
-    //     let contents = self.get_contents();
-    //     let vec_of_contents  = [];
+    pub fn remove_items(&mut self, lines_to_remove: Vec<String>) {
 
-    
-    //     // Filter out the lines to be removed
-    //     let updated_lines: Vec<&str> = contents.lines()
-    //         .filter(|content: String| !lines_to_remove.contains(content))
-    //         .map(|s| s.as_str())
-    //         .collect();
-    
-    //     // Write the updated content back to the file
-    //     let mut file = File::create(self.file_path);
-    //     for line in updated_lines {
-    //         writeln!(file, "{}", line);
-    //     }
-    
+        for line in lines_to_remove {
+            let index_to_remove: usize = line.parse::<i32>().unwrap().try_into().unwrap();
+            self.list.remove(index_to_remove-1);
+        }
 
-    // }
+        self.create_file();
+        let file = OpenOptions::new().write(true).open(FILE_PATH).unwrap();    let mut buffer = BufWriter::new(file);
+        
+        for item in &self.list {
+            print!("{}", item);
+            let line = format!("{}\n", item);
+            let _ = buffer.write(line.as_bytes());
+        }
+        print!("Current list: {:?}", self.list);
+    }
 
     pub fn create_file(&mut self) {
         File::create(FILE_PATH).expect("Failed to create file");
