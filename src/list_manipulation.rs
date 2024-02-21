@@ -58,8 +58,9 @@ impl TodoList {
         }
     }
 
-    pub fn remove_items(&mut self, lines_to_remove: Vec<String>) {
+    pub fn remove_items(&mut self, mut lines_to_remove: Vec<String>) {
 
+        lines_to_remove.sort_by(|a, b| b.cmp(a));
         for line in lines_to_remove {
             let index_to_remove: usize = line.parse::<i32>().unwrap().try_into().unwrap();
             self.list.remove(index_to_remove-1);
