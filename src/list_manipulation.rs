@@ -111,14 +111,6 @@ impl TodoList {
                 Example: todo rm 4
             - reset
                 deletes all tasks
-            - restore 
-                restore recent backup after reset
-            - sort
-                sorts completed and uncompleted tasks
-                Example: todo sort
-            - raw [todo/done]
-                prints nothing but done/incompleted tasks in plain text, useful for scripting
-                Example: todo raw done
         ";
     pub fn help() {
         // For readability
@@ -148,3 +140,31 @@ fn get_contents()-> Vec<String> {
 
     list_of_contents
 }
+
+// const TODO_HELP: &'static str = "Usage: todo [COMMAND] [ARGUMENTS]
+//         Todo is a super fast and simple tasks organizer written in rust
+//         Example: todo list
+//         Available commands:
+//             - add [TASK/s]
+//                 adds new task/s
+//                 Example: todo add \"--go to the the supermarket --do laundry\"
+//             - list
+//                 lists all tasks
+//                 Example: todo list
+//             - done [INDEX]
+//                 marks task as done
+//                 Example: todo done 2 3 (marks second and third tasks as completed)
+//             - rm [INDEX]
+//                 removes a task
+//                 Example: todo rm 4
+//             - reset
+//                 deletes all tasks
+//             - restore 
+//                 restore recent backup after reset
+//             - sort
+//                 sorts completed and uncompleted tasks
+//                 Example: todo sort
+//             - raw [todo/done]
+//                 prints nothing but done/incompleted tasks in plain text, useful for scripting
+//                 Example: todo raw done
+//         ";

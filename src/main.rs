@@ -22,7 +22,7 @@ fn main() {
         match &command[..] {
             "create" => todo_list.create_file(),
             "add" => todo_list.add_item(&args[2..]),
-            "remove" => todo_list.remove_items(args[2..].to_vec()),
+            "rm" => todo_list.remove_items(args[2..].to_vec()),
             "list" => todo_list.list_items(),
             "reset" => todo_list.create_file(),
             "--help" => TodoList::help(),
