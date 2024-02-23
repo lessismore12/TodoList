@@ -1,7 +1,5 @@
 use std::{fs::{File, OpenOptions}, io::{BufWriter, Read, Write}, path::Path};
 
-
-#[allow(unused)]
 const FILE_PATH: &str = "todo.txt";
 
 pub struct TodoList {
@@ -26,12 +24,9 @@ impl TodoList {
         let mut temp = String::from("");
         let mut new_items: Vec<String> = Vec::new();
         for i in 0..items.len() {
-            println!("my item is {}", items[i]);
-            println!("{}", items[i].ends_with(","));
             if items[i].starts_with("--") {
                 if temp != "" {
                     new_items.push(temp.to_string().trim().to_owned());
-                    println!("Vec: {:?}", new_items);
                 }
                 temp = String::from("");
                 temp.push_str(&items[i][2..]);
@@ -70,7 +65,6 @@ impl TodoList {
         let file = OpenOptions::new().write(true).open(FILE_PATH).unwrap();    let mut buffer = BufWriter::new(file);
         
         for item in &self.list {
-            print!("{}", item);
             let line = format!("{}\n", item);
             let _ = buffer.write(line.as_bytes());
         }
@@ -134,8 +128,7 @@ impl TodoList {
 }
 
 
-#[allow(unused)]
-fn does_file_exist() -> bool {
+pub fn does_file_exist() -> bool {
     Path::new(FILE_PATH).exists()
 }
 

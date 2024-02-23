@@ -1,24 +1,16 @@
-// use std::io::{stdin, stdout, Write};
 mod list_manipulation;
-//use list_manipulation::TodoList;
 
-// fn main() {
-//     let mut s = String::new();
-//     print!("Let's make a todo list for you. Please enter in an item: ");
-//     let _ = stdout().flush();
-//     stdin().read_line(&mut s).expect("Did not enter a correct string");
-
-//     println!("You typed: {}",s);
-//     let new_file = list_manipulation::create_file();
-    
-// }
 
 use std::env;
 
-use crate::list_manipulation::TodoList;
+use crate::list_manipulation::{does_file_exist, TodoList};
 
 fn main() {
     let mut todo_list = TodoList::new();
+    
+    if !does_file_exist() {
+        todo_list.create_file();
+    }
 
     let args: Vec<String> = env::args().collect();
 
@@ -40,21 +32,3 @@ fn main() {
         TodoList::help();
     }
 }
-
-// fn test() {
-//     // Create a mutable string to store user input
-//     let mut input = String::new();
-
-//     // Print a prompt without a new line
-//     print!("Please enter some text: ");
-
-//     // Flush the output to ensure the prompt is displayed
-//     io::stdout().flush().unwrap();
-
-//     // Read user input into the string
-//     io::stdin().read_line(&mut input)
-//         .expect("Failed to read line");
-
-//     // Print the user input
-//     println!("You entered: {}", input);
-// }
